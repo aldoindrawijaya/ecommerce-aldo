@@ -1,23 +1,47 @@
-const express = require('express')
-const PORT = 8001
-const app = express()
-const {db} = require("./database")
-const cors = require('cors')
-const {authRoutes} = require('./routes')
+const express = require("express");
+const PORT = 8001;
+const app = express();
+const { db, query } = require("./database");
+const cors = require("cors");
+const { authRoutes } = require("./routes");
+const { body, validationResult } = require("express-validator");
+const upload = require("./middleware/multer");
 
-app.use(cors())
+app.use(cors());
+app.use(express.json());
+app.use(express.static("public"));
 
-app.use(express.json())
+app.post("/upload", upload.single("file"), async (req, res) => {
+  const { file } = req;
+  const filepath = file ? "/" + file.filename : null;
 
-// app.get('/user', async (req, res) => {
-//     let fetchQuery = 'SELECT * FROM users'
-//     db.query(fetchQuery, (err, result) => {
-//         return res.status(200).send(result)
-//     })
-// })
+  let data = JSON.parse(req.body.data);
 
-app.use('/auth', authRoutes)
+  let response = await query(
+    `UPDATE users SET imagePath = ${db.escape(
+      filepath
+    )} WHERE id_users = ${db.escape(data.id)}`
+  );
+  console.log(response);
+
+  res.status(200).send({ filepath });
+});
+
+app.post(
+  "/validation",
+  body("email").isEmail(),
+  body("password").isLength({ min: 5 }),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array() });
+    }
+    res.status(200).send(req.body);
+  }
+);
+
+app.use("/auth", authRoutes);
 
 app.listen(PORT, () => {
-    console.log("Server is running on port: " + PORT)
-})
+  console.log("Server is running on port: " + PORT);
+});
