@@ -9,7 +9,7 @@ function Verification() {
 
   const tokenVerification = async () => {
     const response = await axios.post(
-      "http://localhost:8001/auth/verification",
+      "http://localhost:8002/auth/verification",
       {},
       {
         headers: {
@@ -19,7 +19,7 @@ function Verification() {
     );
     if (response.data.success) {
       alert(response.data.message);
-      navigate("/user/login");
+      navigate("/");
     }
   };
   useEffect(() => {

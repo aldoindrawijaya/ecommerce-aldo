@@ -10,7 +10,7 @@ function Login() {
   const navigate = useNavigate();
   const userGlobal = useSelector((state) => state.user.user);
 
-  const registerSchema = Yup.object().shape({
+  const loginSchema = Yup.object().shape({
     email: Yup.string()
       .required("Email tidak boleh kosong")
       .email("Email format salah"),
@@ -19,11 +19,16 @@ function Login() {
       .min(3, "Password terlalu pendek"),
   });
 
+  const repeatPasswordSchema = async (value) => {
+    let response;
+  };
+
   const handleLoginUser = async (value) => {
     dispatch(loginUser(value));
   };
 
   useEffect(() => {
+    console.log(userGlobal, "xxx");
     if (userGlobal.id > 0) {
       navigate("/");
     }
@@ -33,7 +38,7 @@ function Login() {
     <div>
       <Formik
         initialValues={{ email: "", password: "" }}
-        validationSchema={registerSchema}
+        validationSchema={loginSchema}
         onSubmit={(value) => {
           handleLoginUser(value);
         }}
@@ -44,7 +49,7 @@ function Login() {
               <div className="w-full max-w-md space-y-8">
                 <div>
                   <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                    Login your account
+                    Login your account {userGlobal.id}
                   </h2>
                 </div>
                 <Form className="mt-8 space-y-6" action="#" method="POST">
@@ -90,12 +95,18 @@ function Login() {
                     </div>
                   </div>
 
-                  <div>
+                  <div className="flex flex-row px-5  ">
                     <button
                       type="submit"
                       className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
                       Login
+                    </button>
+                    <button
+                      type="submit"
+                      className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Forgot Password
                     </button>
                   </div>
                 </Form>

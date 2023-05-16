@@ -22,12 +22,10 @@ function Register() {
   const registerUser = async (value) => {
     try {
       setIsLoading(true);
-      let response = await axios.post("http://localhost:8001/auth", value);
+      let response = await axios.post("http://localhost:8002/auth", value);
       alert(response.data.message);
       setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <div>

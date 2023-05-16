@@ -1,9 +1,10 @@
 const express = require("express");
-const PORT = 8001;
+const PORT = 8002;
 const app = express();
 const { db, query } = require("./database");
 const cors = require("cors");
 const { authRoutes } = require("./routes");
+const { postRoutes } = require("./routes");
 const { body, validationResult } = require("express-validator");
 const upload = require("./middleware/multer");
 
@@ -41,6 +42,7 @@ app.post(
 );
 
 app.use("/auth", authRoutes);
+app.use("/post", postRoutes);
 
 app.listen(PORT, () => {
   console.log("Server is running on port: " + PORT);

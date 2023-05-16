@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import Verification from "./pages/Verification";
 import { useDispatch, useSelector } from "react-redux";
 import { checkLogin } from "./features/user/userSlice";
-import Users from "./pages/Users";
+import Profile from "./pages/Profile";
 
 function App() {
   const userToken = localStorage.getItem("user_token");
@@ -16,8 +16,10 @@ function App() {
   const userGlobal = useSelector((state) => state.user.user);
 
   useEffect(() => {
+    console.log("app");
     dispatch(checkLogin(userToken));
-  });
+    console.log(userToken);
+  }, [userToken]);
 
   return (
     <div>
@@ -26,14 +28,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/user/update-profile" element={<UpdateProfile />} />
         <Route path="/verification/:token" element={<Verification />} />
-        {userGlobal.id > 0 ? (
-          <Route path="/users" element={<Users />} />
-        ) : (
-          <>
-            <Route path="/user/login" element={<Login />} />
-            <Route path="/user/register" element={<Register />} />
-          </>
-        )}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/user/login" element={<Login />} />
+        <Route path="/user/register" element={<Register />} />
       </Routes>
     </div>
   );

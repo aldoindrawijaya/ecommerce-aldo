@@ -12,17 +12,16 @@ function Navbar() {
   return (
     <div className="bg-black flex flex-row justify-between items-center px-10 h-20">
       <div className="text-white">
-        <p className="font-semibold text-lg">Ecommerce Wannabe</p>
+        <p className="font-semibold text-lg">Mini insta</p>
       </div>
       <div className="text-white flex flex-row items-center gap-10">
-        <p>Home</p>
-        <p>Product</p>
-        <p>About</p>
+        <p onClick={() => navigate("/users")}>Profile</p>
+        <p onClick={() => navigate("/user/update-profile")}>Posting</p>
         {userGlobal.id > 0 ? (
           <>
             {userGlobal.imagePath ? (
               <img
-                src={`http://localhost:8001/${userGlobal.imagePath}`}
+                src={`http://localhost:8002/${userGlobal.imagePath}`}
                 alt=""
                 className="w-10 h-10 rounded-full"
               />
@@ -35,14 +34,14 @@ function Navbar() {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
               </div>
             )}
-            <div>
+            <div className="flex flex-row justify-between items-center">
               <p
                 onClick={() => {
                   dispatch(logoutUser());

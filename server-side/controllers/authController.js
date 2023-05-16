@@ -6,6 +6,7 @@ const Mail = require("nodemailer/lib/mailer");
 
 module.exports = {
   register: async (req, res) => {
+    console.log(req.body);
     const { username, email, name, password } = req.body;
 
     /* CALLBACK HELL
@@ -111,7 +112,7 @@ module.exports = {
         isAdmin: isEmailExist[0].isAdmin,
       };
 
-      const token = jwt.sign(payload, "joe", { expiresIn: "1h" });
+      const token = jwt.sign(payload, "joe");
 
       return res.status(200).send({
         message: "Login Success",
@@ -135,6 +136,7 @@ module.exports = {
       const users = await query(`SELECT * FROM users`);
       return res.status(200).send(users);
     } catch (error) {
+      console.log(error, "aaa");
       res.status(error.status || 500).send(error);
     }
   },
@@ -175,13 +177,23 @@ module.exports = {
     try {
       console.log("verification", req.user);
       const id = req.user.id;
-      let updateisActiveQuery = `UPDATE users SET isActive = true WHERE id_users=${db.escape(
+      let updateIsActiveQuery = `UPDATE users SET isActive = true WHERE id_users=${db.escape(
         id
       )}`;
-      await query(updateisActiveQuery);
+      await query(updateIsActiveQuery);
       res.status(200).send({ success: true, message: "account is verified" });
     } catch (error) {
       res.status(500).send(error);
     }
+  },
+  updateProfile: async (req, res) => {
+    const { name, bio, username, email, id_users } = req.body;
+    let updateProfile = `UPDATE users SET name=${db.escape(
+      name
+    )}, bio=${db.escape(bio)}, username=${db.escape(
+      username
+    )}, email=${db.escape(email)} WHERE id_users=${db.escape(id_users)}`;
+    await query(updateProfile);
+    res.status(200).send({ success: true, message: "data has been updated" });
   },
 };
